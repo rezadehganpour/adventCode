@@ -1,12 +1,10 @@
-package main
+package problems
 
 import (
-	"fmt"
-
 	"advent-code-2021/commonLib"
 )
 
-func main() {
+func RunProgramOne() int {
 	dat, err := commonLib.ReadInput("./inputFiles/ProblemOne.txt")
 	commonLib.CheckForError(err)
 	result := 0
@@ -17,5 +15,5 @@ func main() {
 		}
 		currentVal = dat[index]
 	}
-	fmt.Println(result)
+	return result
 }
