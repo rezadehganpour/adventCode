@@ -5,7 +5,7 @@ import (
 )
 
 func RunProgramOne() int {
-	dat, err := commonLib.ReadInput("./inputFiles/ProblemOne.txt")
+	dat, err := commonLib.ReadDayOneInput("./inputFiles/ProblemOne.txt")
 	commonLib.CheckForError(err)
 	result := 0
 	currentVal := dat[0]

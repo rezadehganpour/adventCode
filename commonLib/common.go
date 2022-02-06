@@ -1,9 +1,11 @@
 package commonLib
 
 import (
+	"advent-code-2021/model"
 	"bufio"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func CheckForError(e error) {
@@ -12,7 +14,7 @@ func CheckForError(e error) {
 	}
 }
 
-func ReadInput(filePath string) ([]int, error) {
+func ReadDayOneInput(filePath string) ([]int, error) {
 	file, err := os.Open(filePath)
 	CheckForError(err)
 	defer file.Close()
@@ -21,6 +23,22 @@ func ReadInput(filePath string) ([]int, error) {
 	for scanner.Scan() {
 		newValue, _ := strconv.Atoi(scanner.Text())
 		result = append(result, newValue)
+	}
+	return result, scanner.Err()
+}
+
+func ReadDayTwoInput(filePath string) ([]model.Move, error) {
+	file, err := os.Open(filePath)
+	CheckForError(err)
+	defer file.Close()
+	var result []model.Move
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		submarineMove := strings.Split(scanner.Text(), " ")
+		newDirection := model.GetDirection(submarineMove[0])
+		newMoveNum, _ := strconv.Atoi(submarineMove[1])
+		var newMove = model.Move{SubDirection: newDirection, NumberOfMoves: newMoveNum}
+		result = append(result, newMove)
 	}
 	return result, scanner.Err()
 }

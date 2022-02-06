@@ -15,6 +15,10 @@ func main() {
 		printAnswer(problems.RunProgramOne())
 	case *problem == "2":
 		printAnswer(problems.RunProgramTwo())
+	case *problem == "3":
+		printAnswer(problems.RunProgramThree())
+	case *problem == "4":
+		printAnswer(problems.RunProgramFour())
 	default:
 		fmt.Println("Not problem was run")
 	}
