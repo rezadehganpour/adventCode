@@ -6,7 +6,7 @@ import (
 )
 
 func RunProgramFour() int {
-	dat, err := commonLib.ReadDayTwoInput("./inputFiles/ProblemThree.txt")
+	dat, err := commonLib.ReadDayTwoInput("./inputFiles/ProblemFour.txt")
 	commonLib.CheckForError(err)
 	var x int = 0
 	var y int = 0
