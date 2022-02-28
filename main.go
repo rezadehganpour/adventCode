@@ -23,6 +23,10 @@ func main() {
 		printAnswer(problems.RunProgramFive())
 	case *problem == "6":
 		printAnswer(problems.RunProgramSix())
+	case *problem == "7":
+		printAnswer(problems.RunProgramSeven())
+	case *problem == "8":
+		printAnswer(problems.RunProgramEight())
 	default:
 		fmt.Println("Not problem was run")
 	}
