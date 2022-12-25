@@ -13,6 +13,8 @@ func main() {
 	switch {
 	case *problem == "1":
 		printAnswer(problems.RunProgramOne())
+	case *problem == "2":
+		printAnswer(problems.RunProgramTwo())
 	default:
 		fmt.Println("Not problem was run")
 	}
