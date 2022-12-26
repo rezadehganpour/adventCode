@@ -71,6 +71,20 @@ func ReadDayTwoInput(filePath string) ([]model.Game, error) {
 	}
 	return result, err
 }
+
+func ReadDayThreeInput(filePath string) ([]string, error) {
+	file, err := os.Open(filePath)
+	CheckForError(err)
+	defer file.Close()
+	var result []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		newValue := scanner.Text()
+		result = append(result, newValue)
+	}
+	return result, err
+}
+
 func CheckForError(e error) {
 	if e != nil {
 		panic(e)
