@@ -85,6 +85,29 @@ func ReadDayThreeInput(filePath string) ([]string, error) {
 	return result, err
 }
 
+func ReadDayFourInput(filePath string) ([]model.ElfPair, error) {
+	file, err := os.Open(filePath)
+	CheckForError(err)
+	defer file.Close()
+	var result []model.ElfPair
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		newValue := scanner.Text()
+		twoPairs := strings.Split(newValue, ",")
+		firstPairCord := strings.Split(twoPairs[0], "-")
+		firstPairBegin, _ := strconv.Atoi(firstPairCord[0])
+		firstPairEnd, _ := strconv.Atoi(firstPairCord[1])
+		firstElf := model.Coordiantion{Begin: firstPairBegin, End: firstPairEnd}
+		secondPairCord := strings.Split(twoPairs[1], "-")
+		secondPairBegin, _ := strconv.Atoi(secondPairCord[0])
+		secondPairEnd, _ := strconv.Atoi(secondPairCord[1])
+		secondElf := model.Coordiantion{Begin: secondPairBegin, End: secondPairEnd}
+		elfs := model.ElfPair{First: firstElf, Second: secondElf}
+		result = append(result, elfs)
+	}
+	return result, err
+}
+
 func CheckForError(e error) {
 	if e != nil {
 		panic(e)
