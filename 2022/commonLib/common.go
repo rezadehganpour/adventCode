@@ -4,6 +4,7 @@ import (
 	"advent_code_2022/main/model"
 	"bufio"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -105,6 +106,45 @@ func ReadDayFourInput(filePath string) ([]model.ElfPair, error) {
 		elfs := model.ElfPair{First: firstElf, Second: secondElf}
 		result = append(result, elfs)
 	}
+	return result, err
+}
+
+func ReadDayFiveInput(filePath string) (model.Cargo, error) {
+	file, err := os.Open(filePath)
+	CheckForError(err)
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	var stacks = make([][]string, 10)
+
+	for scanner.Scan() {
+		var stackNum int
+		newValue := scanner.Text()
+		if !strings.Contains(newValue, "[") {
+			break
+		}
+		for i := 0; i < len(newValue); i += 4 {
+			if string(newValue[i]) == "[" {
+				var value string = string(newValue[i+1])
+				stack := stacks[stackNum]
+				stack = append([]string{value}, stack...)
+				stacks[stackNum] = stack
+			}
+			stackNum += 1
+		}
+	}
+	re := regexp.MustCompile("[0-9]+")
+	var instructions []model.CargoMove
+	for scanner.Scan() {
+		allMatches := re.FindAllString(scanner.Text(), -1)
+		if len(allMatches) != 0 {
+			quantity, _ := strconv.Atoi(allMatches[0])
+			from, _ := strconv.Atoi(allMatches[1])
+			to, _ := strconv.Atoi(allMatches[2])
+			newItem := model.CargoMove{Qun: quantity, To: to, From: from}
+			instructions = append(instructions, newItem)
+		}
+	}
+	result := model.Cargo{Crates: stacks, Instructions: instructions}
 	return result, err
 }
 
