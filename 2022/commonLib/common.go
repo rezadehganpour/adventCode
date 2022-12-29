@@ -148,6 +148,17 @@ func ReadDayFiveInput(filePath string) (model.Cargo, error) {
 	return result, err
 }
 
+func ReadDaySixInput(filePath string) string {
+	var result string
+	file, err := os.Open(filePath)
+	CheckForError(err)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		result = scanner.Text()
+	}
+	return result
+}
+
 func CheckForError(e error) {
 	if e != nil {
 		panic(e)
