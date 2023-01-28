@@ -3,6 +3,7 @@ package commonLib
 import (
 	"advent_code_2022/main/model"
 	"bufio"
+	"fmt"
 	"os"
 	"regexp"
 	"strconv"
@@ -146,6 +147,84 @@ func ReadDayFiveInput(filePath string) (model.Cargo, error) {
 	}
 	result := model.Cargo{Crates: stacks, Instructions: instructions}
 	return result, err
+}
+
+func ReadDaySevenInput(filePath string) []*model.Directory {
+	var allDirects []*model.Directory
+	file, err := os.Open(filePath)
+	CheckForError(err)
+	scanner := bufio.NewScanner(file)
+	scanner.Scan()
+	scanner.Text()
+	// First scan is always cd to the root
+	topDirect := model.Directory{Name: "/", FullName: "/", Parent: nil}
+	currDir := &topDirect
+	allDirects = append(allDirects, &topDirect)
+	for scanner.Scan() {
+		input := scanner.Text()
+		if "$" == string(input[0:1]) {
+			// its a command
+			if "$ cd" == string(input[0:4]) {
+				directName := string(input[5:])
+				if directName == ".." {
+					currDir = currDir.Parent
+				} else {
+					fullDirectName := currDir.FullName + "." + directName
+					theDir, exist := checkIfDirectoryExist(fullDirectName, allDirects)
+					if exist {
+						currDir = theDir
+					} else {
+						newDir := model.Directory{Name: directName, FullName: fullDirectName, Parent: currDir}
+						allDirects = append(allDirects, &newDir)
+						currDirs := currDir.Directories
+						currDirs = append(currDirs, &newDir)
+						currDir.Directories = currDirs
+						currDir = &newDir
+					}
+				}
+
+			} else {
+				fmt.Println("The input was a ls")
+			}
+		} else if "dir" == string(input[0:3]) {
+			// its a directory
+			directName := string(input[4:])
+			fullDirectName := currDir.FullName + "." + directName
+			_, exist := checkIfDirectoryExist(fullDirectName, allDirects)
+			if exist {
+				fmt.Printf("The Directory already exist %s\n", directName)
+			} else {
+				newDir := model.Directory{Name: directName, FullName: fullDirectName, Parent: currDir}
+				allDirects = append(allDirects, &newDir)
+				currDirs := currDir.Directories
+				currDirs = append(currDirs, &newDir)
+				currDir.Directories = currDirs
+			}
+
+		} else {
+			// its a file
+			fileStructure := strings.Split(input, " ")
+			fileSize, _ := strconv.Atoi(fileStructure[0])
+			newFile := model.File{Name: fileStructure[1], Size: fileSize}
+			currFiles := currDir.Files
+			currFiles = append(currFiles, newFile)
+			currDir.Files = currFiles
+		}
+	}
+	return allDirects
+}
+
+func checkIfDirectoryExist(directFullName string, existingDirs []*model.Directory) (*model.Directory, bool) {
+	var existingDir *model.Directory
+	var doesItExist bool
+	for _, dir := range existingDirs {
+		if dir.FullName == directFullName {
+			existingDir = dir
+			doesItExist = true
+			break
+		}
+	}
+	return existingDir, doesItExist
 }
 
 func ReadDaySixInput(filePath string) string {
